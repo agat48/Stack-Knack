@@ -19,7 +19,7 @@ public class control : MonoBehaviour {
 		gyro.enabled = true;
 		//ball = GameObject.Find ("Sphere");
 		initialOrientationZ = Input.acceleration.x;
-		ball.rigidbody.useGravity = false;
+		ball.GetComponent<Rigidbody>().useGravity = false;
 
 	}
 	void OnGUI()
@@ -35,7 +35,7 @@ public class control : MonoBehaviour {
 			GUIStyle customButton = new GUIStyle("button");
 			customButton.fontSize = 40;
 			if (GUI.Button (new Rect (Screen.width/2-Screen.width/6, Screen.height/2-Screen.height/40, Screen.width/3, Screen.height/20), "Start",customButton)) {
-				ball.rigidbody.useGravity = true;
+				ball.GetComponent<Rigidbody>().useGravity = true;
 				opt = ! opt;
 			}
 		}
@@ -66,8 +66,8 @@ public class control : MonoBehaviour {
 		if (ball.transform.position.y < 1.0f) {
 			opt = true;
 
-			ball.rigidbody.velocity = Vector3.zero;
-			ball.rigidbody.angularVelocity = Vector3.zero;
+			ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
+			ball.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 			ball.transform.position = new Vector3(1.65f, 3.1f, 0);
 			ball.transform.rotation = Quaternion.Euler(0, 0, 0);
 
