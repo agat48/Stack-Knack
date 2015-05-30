@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\MainScr.cs" />
+     <Compile Include="Assets\ObjectData.cs" />
      <Compile Include="Assets\SwipeDetector.cs" />
      <Compile Include="Assets\control.cs" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Particle Shaders\Mobile Multiply Culled.shader" />
