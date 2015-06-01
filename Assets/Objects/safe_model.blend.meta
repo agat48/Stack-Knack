@@ -1,0 +1,139 @@
+fileFormatVersion: 2
+guid: ff369f5cd83b76a42b4b6afe9e284cf2
+timeCreated: 1433080584
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Font
+    100002: Font_001
+    100004: Font_002
+    100006: Font_003
+    100008: Font_004
+    100010: Font_005
+    100012: Font_006
+    100014: Font_007
+    100016: Font_008
+    100018: Font_009
+    100020: Font_010
+    100022: Font_011
+    100024: Font_012
+    100026: Plane
+    100028: //RootNode
+    400000: Font
+    400002: Font_001
+    400004: Font_002
+    400006: Font_003
+    400008: Font_004
+    400010: Font_005
+    400012: Font_006
+    400014: Font_007
+    400016: Font_008
+    400018: Font_009
+    400020: Font_010
+    400022: Font_011
+    400024: Font_012
+    400026: Plane
+    400028: //RootNode
+    2300000: Font
+    2300002: Font_001
+    2300004: Font_002
+    2300006: Font_003
+    2300008: Font_004
+    2300010: Font_005
+    2300012: Font_006
+    2300014: Font_007
+    2300016: Font_008
+    2300018: Font_009
+    2300020: Font_010
+    2300022: Font_011
+    2300024: Font_012
+    2300026: Plane
+    3300000: Font
+    3300002: Font_001
+    3300004: Font_002
+    3300006: Font_003
+    3300008: Font_004
+    3300010: Font_005
+    3300012: Font_006
+    3300014: Font_007
+    3300016: Font_008
+    3300018: Font_009
+    3300020: Font_010
+    3300022: Font_011
+    3300024: Font_012
+    3300026: Plane
+    4300000: Font_012
+    4300002: Font_011
+    4300004: Font_010
+    4300006: Font_009
+    4300008: Font_008
+    4300010: Font_007
+    4300012: Font_006
+    4300014: Font_005
+    4300016: Font_004
+    4300018: Font_003
+    4300020: Font_002
+    4300022: Font_001
+    4300024: Font
+    4300026: Plane
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
