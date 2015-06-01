@@ -192,9 +192,6 @@ public class SwipeDetector : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKey ("c")) {
-			LevelComplete();
-		}
 		//#if UNITY_ANDROID
 		if (start) {
 			timer -= Time.deltaTime;
@@ -221,7 +218,8 @@ public class SwipeDetector : MonoBehaviour
 
 				if(complete){
 					//next lvl
-					Application.LoadLevel("levels_16x9");
+					//Application.LoadLevel("levels_16x9");
+					LevelComplete();
 				}else{
 					//porazka
 
@@ -425,14 +423,16 @@ public class SwipeDetector : MonoBehaviour
 	}
 
 	void LevelComplete() {
-		string filename = "./levelsEnabled";
-		int levelsAvailable = int.Parse(System.IO.File.ReadAllText(filename));
-		string[] sceneName = Application.loadedLevelName.Split (char.Parse ("-"));
-		int newAvailable = int.Parse(sceneName[sceneName.Length]);
-		if(newAvailable >= levelsAvailable) {
-			System.IO.File.WriteAllText(filename, "" + (newAvailable + 1));
+		if (!GameObject.Find ("LevelComplete(Clone)")) {
+			string filename = "./levelsEnabled";
+			int levelsAvailable = int.Parse (System.IO.File.ReadAllText (filename));
+			string[] sceneName = Application.loadedLevelName.Split (char.Parse ("-"));
+			int newAvailable = int.Parse (sceneName [sceneName.Length - 1]);
+			if (newAvailable >= levelsAvailable) {
+				System.IO.File.WriteAllText (filename, "" + (newAvailable + 1));
+			}
+			Canvas newCanvas = Instantiate (LevelCompleted);
 		}
-		Canvas newCanvas = Instantiate (LevelCompleted);
 	}
 	void LevelFail() {
 		Canvas newCanvas = Instantiate (LevelFailed);
