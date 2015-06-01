@@ -41,6 +41,9 @@ public class SwipeDetector : MonoBehaviour
 	private float rotZ;
 	private float step;
 	private float initialOrientationZ;
+
+
+	private float timer; 
 	void Start(){
 	
 		zoomIn = new Rect (Screen.width/100, Screen.height- 50, Screen.width/5, Screen.height/10);
@@ -60,14 +63,14 @@ public class SwipeDetector : MonoBehaviour
 		{
 			objects[i].constraints = RigidbodyConstraints.FreezeAll;
 		}
-	
+
+		timer = 5;
+
 	}
 	void OnGUI()
 	{
 		GUIStyle smallFont = new GUIStyle("button");
 		smallFont.fontSize = 30;
-		
-
 
 		GUIStyle customButton = new GUIStyle("button");
 		customButton.fontSize = 40;
@@ -93,12 +96,14 @@ public class SwipeDetector : MonoBehaviour
 					Camera.main.transform.position -= Camera.main.transform.forward * Time.deltaTime;
 				}
 
-				if (GUI.Button (rotationField, "o", customButton)) {//zoom out
 
-				}
 
 			}
-			
+
+			if (GUI.Button (rotationField, "o", customButton)) {//zoom out
+				
+			}
+
 			if (GUI.Button (new Rect (Screen.width / 100, Screen.height / 100, Screen.width / 3, Screen.height / 10), "Front", smallFont)) {//zoom out
 				Camera.main.transform.position = new Vector3 (0, 7.2f, -7.5f);
 				Camera.main.transform.transform.localEulerAngles = new Vector3 (10, 0, 0);
@@ -129,7 +134,11 @@ public class SwipeDetector : MonoBehaviour
 					}
 					paddle.transform.rotation=Quaternion.Euler(Vector3.zero);
 					start = false;
+
+					timer = 5;
 				}
+
+				GUI.Label(new Rect(Screen.width- 100,10,90,40),""+Mathf.Round(timer), smallFont);
 			}else{
 				if (GUI.Button (new Rect (Screen.width / 100, Screen.height / 100, Screen.width / 3, Screen.height / 10), "Start", smallFont)) {//zoom out
 					start = true;
@@ -140,7 +149,8 @@ public class SwipeDetector : MonoBehaviour
 						objectsBck.Add( new ObjectData(objects[i].transform.position, objects[i].rotation));
 						objects[i].useGravity = true;
 						objects[i].constraints = RigidbodyConstraints.None;
-
+						objects[i].constraints = RigidbodyConstraints.FreezeRotationX;
+						objects[i].constraints = RigidbodyConstraints.FreezePositionZ;
 					}
 
 					initialOrientationZ = Input.acceleration.x;
@@ -180,11 +190,48 @@ public class SwipeDetector : MonoBehaviour
 	{
 		//#if UNITY_ANDROID
 		if (start) {
+			timer -= Time.deltaTime;
+
 			rotZ = paddle.transform.rotation.eulerAngles.z;
 			step = (Input.acceleration.x - initialOrientationZ)*1.7f;
 			
 			if ((rotZ - step) < 30.0f || (rotZ - step) > 330.0f) {
 				paddle.transform.Rotate (0, 0, -step);
+			}
+			bool complete = true;
+
+			for (int i = 0; i < objects.Length; i++)
+			{
+				if(objects[i].transform.position.y <= 0)
+				{
+					complete = false;
+					break;
+				}
+				
+			}
+
+			if(timer <= 0){
+
+				if(complete){
+					//next lvl
+					Application.LoadLevel("levels_16x9");
+				}else{
+					//porazka
+
+					for (int i = 0; i < objects.Length; i++)
+					{
+						objects[i].useGravity = false;
+						objects[i].velocity = Vector3.zero;
+						objects[i].angularVelocity = Vector3.zero;
+						objects[i].transform.position = objectsBck[i].pos;
+						objects[i].rotation = objectsBck[i].rot;
+					}
+					paddle.transform.rotation=Quaternion.Euler(Vector3.zero);
+					start = false;
+
+					timer = 5;
+				}
+
 			}
 		}
 
@@ -250,6 +297,37 @@ public class SwipeDetector : MonoBehaviour
 					return;
 				}
 
+			}else{
+				Vector2 vec = touch.position;
+				vec.y = Screen.height - vec.y;
+				if (rotationField.Contains (vec)) {
+					
+					float swipeValueY = Mathf.Sign (touch.position.y - startPos.y);
+					float swipeValueX = Mathf.Sign (touch.position.x - startPos.x);
+					
+					swipeDistVertical = (new Vector3 (0, touch.position.y, 0) - new Vector3 (0, startPos.y, 0)).magnitude;
+					swipeDistHorizontal = (new Vector3 (touch.position.x, 0, 0) - new Vector3 (startPos.x, 0, 0)).magnitude;
+					
+
+					//inaczej możemy przesuwać
+					Vector3 v3 = Camera.main.transform.position;
+					Vector3 trans = Camera.main.transform.right * 2 * Time.deltaTime;
+					v3.z = Mathf.Clamp (v3.z + swipeValueX * trans.z, minZ, maxZ);
+					v3.y = Mathf.Clamp (v3.y + swipeValueX * trans.y, minY, maxY);
+					v3.x = Mathf.Clamp (v3.x + swipeValueX * trans.x, minX, maxX);
+					Camera.main.transform.position = v3;
+
+					//inaczej możemy przesuwać
+					v3 = Camera.main.transform.position;
+					trans = Camera.main.transform.up * 2 * Time.deltaTime;
+					v3.z = Mathf.Clamp (v3.z + swipeValueY * trans.z, minZ, maxZ);
+					v3.y = Mathf.Clamp (v3.y + swipeValueY * trans.y, minY, maxY);
+					v3.x = Mathf.Clamp (v3.x + swipeValueY * trans.x, minX, maxX);
+					Camera.main.transform.position = v3;
+
+
+					return;
+				}
 			}
 			if(objectSelected){
 				//rotacja wybranego obiektu
@@ -336,77 +414,6 @@ public class SwipeDetector : MonoBehaviour
 				obj.GetComponent<Renderer> ().material.SetColor ("_Color", objColor);
 			}
 
-
-			swipeDistVertical = (new Vector3 (0, touch.position.y, 0) - new Vector3 (0, startPos.y, 0)).magnitude;
-			swipeDistHorizontal = (new Vector3 (touch.position.x, 0, 0) - new Vector3 (startPos.x, 0, 0)).magnitude;
-
-			if (swipeDistVertical > minSwipeDistY) {
-				
-				float swipeValue = Mathf.Sign (touch.position.y - startPos.y);
-				Vector3 localRight = Camera.main.transform.worldToLocalMatrix.MultiplyVector (Camera.main.transform.right);
-
-				if (swipeValue > 0) {//up swipe
-
-					if (Camera.main.transform.position.y >= maxY) {
-
-						//inaczej możemy przesuwać
-						Vector3 v3 = Camera.main.transform.position;
-						Vector3 trans = Camera.main.transform.up * 2 * Time.deltaTime;
-						v3.z = Mathf.Clamp (v3.z - trans.z, minZ, maxZ);
-						v3.y = Mathf.Clamp (v3.y - trans.y, minY, maxY);
-						v3.x = Mathf.Clamp (v3.x - trans.x, minX, maxX);
-						Camera.main.transform.position = v3;
-					}
-
-
-					Debug.Log ("up" + swipeValue);	
-					
-				} else if (swipeValue < 0) {//down swipe
-					if (Camera.main.transform.position.y >= maxY) {
-
-						//inaczej możemy przesuwać
-						Vector3 v3 = Camera.main.transform.position;
-						Vector3 trans = Camera.main.transform.up * 2 * Time.deltaTime;
-						v3.z = Mathf.Clamp (v3.z + trans.z, minZ, maxZ);
-						v3.y = Mathf.Clamp (v3.y + trans.y, minY, maxY);
-						v3.x = Mathf.Clamp (v3.x + trans.x, minX, maxX);
-						Camera.main.transform.position = v3;
-					}
-				}
-				
-			}else
-			if (swipeDistHorizontal > minSwipeDistX) {	
-				float swipeValue = Mathf.Sign (touch.position.x - startPos.x);
-				
-				if (swipeValue > 0) {//right swipe
-					if (Camera.main.transform.position.y >= maxY) {
-
-
-						//inaczej możemy przesuwać
-						Vector3 v3 = Camera.main.transform.position;
-						Vector3 trans = Camera.main.transform.right * 2 * Time.deltaTime;
-						v3.z = Mathf.Clamp (v3.z - trans.z, minZ, maxZ);
-						v3.y = Mathf.Clamp (v3.y - trans.y, minY, maxY);
-						v3.x = Mathf.Clamp (v3.x - trans.x, minX, maxX);
-						Camera.main.transform.position = v3;
-					}
-					
-				} else if (swipeValue < 0) {//left swipe
-
-
-					if (Camera.main.transform.position.y >= maxY) {
-
-						
-						//inaczej możemy przesuwać
-						Vector3 v3 = Camera.main.transform.position;
-						Vector3 trans = Camera.main.transform.right * 2 * Time.deltaTime;
-						v3.z = Mathf.Clamp (v3.z + trans.z, minZ, maxZ);
-						v3.y = Mathf.Clamp (v3.y + trans.y, minY, maxY);
-						v3.x = Mathf.Clamp (v3.x + trans.x, minX, maxX);
-						Camera.main.transform.position = v3;
-					}
-				}
-			}
 		}
 	}
 }
