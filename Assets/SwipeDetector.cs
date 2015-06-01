@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class SwipeDetector : MonoBehaviour 
 {
 	
@@ -41,6 +42,11 @@ public class SwipeDetector : MonoBehaviour
 	private float rotZ;
 	private float step;
 	private float initialOrientationZ;
+
+	
+	public Canvas LevelCompleted;
+	public Canvas LevelFailed;
+
 	void Start(){
 	
 		zoomIn = new Rect (Screen.width/100, Screen.height- 50, Screen.width/5, Screen.height/10);
@@ -178,6 +184,9 @@ public class SwipeDetector : MonoBehaviour
 
 	void Update()
 	{
+		if (Input.GetKey ("c")) {
+			LevelComplete();
+		}
 		//#if UNITY_ANDROID
 		if (start) {
 			rotZ = paddle.transform.rotation.eulerAngles.z;
@@ -408,5 +417,19 @@ public class SwipeDetector : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	void LevelComplete() {
+		string filename = "./levelsEnabled";
+		int levelsAvailable = int.Parse(System.IO.File.ReadAllText(filename));
+		string[] sceneName = Application.loadedLevelName.Split (char.Parse ("-"));
+		int newAvailable = int.Parse(sceneName[sceneName.Length]);
+		if(newAvailable >= levelsAvailable) {
+			System.IO.File.WriteAllText(filename, "" + (newAvailable + 1));
+		}
+		Canvas newCanvas = Instantiate (LevelCompleted);
+	}
+	void LevelFail() {
+		Canvas newCanvas = Instantiate (LevelFailed);
 	}
 }

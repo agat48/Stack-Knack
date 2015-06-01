@@ -46,8 +46,9 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\EnableLevels.cs" />
+     <Compile Include="Assets\Initialize.cs" />
      <Compile Include="Assets\LoadLevel.cs" />
-     <Compile Include="Assets\LoadLevelMenu.cs" />
      <Compile Include="Assets\MainScr.cs" />
      <Compile Include="Assets\ObjectData.cs" />
      <Compile Include="Assets\SwipeDetector.cs" />
