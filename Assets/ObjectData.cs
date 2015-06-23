@@ -10,7 +10,7 @@ public class ObjectData : IComparable<ObjectData> {
 	public ObjectData(Vector3 _pos, Quaternion _rot)
 	{
 		pos = _pos;
-		rot = _rot;
+		rot = _rot; 
 	}
 
 	public int CompareTo(ObjectData other)
