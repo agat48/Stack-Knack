@@ -172,6 +172,7 @@ public class GameControl : MonoBehaviour
 						}
 
 						initialOrientationZ = Input.acceleration.x;
+						Debug.Log("Z - "+initialOrientationZ);
 					}
 					if (GUI.Button (new Rect (Screen.width - Screen.width / 100 - Screen.width / 3, Screen.height / 100, Screen.width / 3, Screen.height / 10), "Edit", smallFont)) {//zoom out
 						
@@ -269,8 +270,10 @@ public class GameControl : MonoBehaviour
 
 			//sterowanie podstawą
 			rotZ = paddle.transform.rotation.eulerAngles.z;
-			step = (Input.acceleration.x - initialOrientationZ)*1.7f;
-			
+			step = (Input.acceleration.x - initialOrientationZ)*1.5f;
+			step = Mathf.Clamp(step, -1, 1);
+
+			Debug.Log("Zstep - "+step);
 			if ((rotZ - step) < 30.0f || (rotZ - step) > 330.0f) {
 				paddle.transform.Rotate (0, 0, -step);
 			}
