@@ -59,9 +59,11 @@ public class GameControl : MonoBehaviour
 	private float dist;
 	void Start(){
 		
-		zoomIn = new Rect (Screen.width/100, Screen.height- 50, Screen.width/5, Screen.height/10);
+		/* 
+		 * zoomIn = new Rect (Screen.width/100, Screen.height- 50, Screen.width/5, Screen.height/10);
 		zoomOut = new Rect (Screen.width/50 + Screen.width/5, Screen.height- 50, Screen.width/5, Screen.height/10);
 		rotationField= new Rect (Screen.width-Screen.width/100- Screen.width/2.5f, Screen.height- Screen.height/7, Screen.width/2.5f, Screen.height/7);
+		*/
 		
 		minX = -10;
 		maxX = 10;
@@ -101,6 +103,7 @@ public class GameControl : MonoBehaviour
 					return;
 				}
 				
+				/*
 				if (Camera.main.transform.position.y < maxY) {
 					//rysowanie przycisków i obsługa myszki
 					if (GUI.RepeatButton (zoomIn, "+", customButton)) {//zoom in
@@ -114,10 +117,11 @@ public class GameControl : MonoBehaviour
 					
 					
 				}
+				*/
 				
-				if (GUI.Button (rotationField, "o", customButton)) {//zoom out
+				/*if (GUI.Button (rotationField, "o", customButton)) {//zoom out
 					
-				}
+				} */
 				
 				if (GUI.Button (new Rect (Screen.width / 100, Screen.height / 100, Screen.width / 3, Screen.height / 10), "Front", smallFont)) {//zoom out
 					Camera.main.transform.position = new Vector3 (0, 7.2f, -7.5f);
@@ -318,7 +322,7 @@ public class GameControl : MonoBehaviour
 				}
 				
 				//rotacja
-				if (rotationField.Contains (vec)) {
+				/*if (rotationField.Contains (vec)) {
 					
 					float swipeValueY = Mathf.Sign (touch.position.y - startPos.y);
 					float swipeValueX = Mathf.Sign (touch.position.x - startPos.x);
@@ -376,7 +380,7 @@ public class GameControl : MonoBehaviour
 					
 					
 					return;
-				}
+				}*/
 			}
 			
 			if (objectSelected) {
