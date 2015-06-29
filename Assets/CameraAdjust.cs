@@ -7,10 +7,6 @@ public class CameraAdjust : MonoBehaviour {
 	float speed = 30.0f;
 	// Use this for initialization
 	void Start () {
-		Vector3 platform = GameObject.Find ("Platform").transform.position;
-		float levelY = GameObject.Find ("Level").transform.position.y;
-		float middleY = (platform.y + levelY) / 2;
-		Camera.main.transform.LookAt (new Vector3(platform.x, middleY, platform.z));
 		initialCameraOrientation = Camera.main.transform.eulerAngles;
 	}
 	

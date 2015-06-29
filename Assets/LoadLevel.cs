@@ -20,4 +20,20 @@ public class LoadLevel : MonoBehaviour {
 		int actLevel = int.Parse(actLevelStr [actLevelStr.Length - 1]);
 		LoadLevelByNumber (++actLevel);
 	}
+	public void DestroyCanvas() {
+		Destroy (GameObject.Find ("LevelFail(Clone)").gameObject);
+	}
+	public void ReloadLevel() {
+		Application.LoadLevel (Application.loadedLevelName);
+	}
+	public void Settings() {
+		Application.LoadLevel("settings_16x9");
+	}
+
+	public void ClearGame() {
+		string filename = "./levelsEnabled";
+		if(System.IO.File.Exists(filename)) {
+			System.IO.File.WriteAllText(filename, "1");
+		}
+	}
 }

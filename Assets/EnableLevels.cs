@@ -7,6 +7,15 @@ public class EnableLevels : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
+		initLevels ();
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+
+	public void initLevels() {
 		int levelsAvailable = PlayerPrefs.GetInt("Levels");
 		
 		//jeśli nie zostało ustawione
@@ -27,10 +36,5 @@ public class EnableLevels : MonoBehaviour {
 				// sth
 			}
 		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 }

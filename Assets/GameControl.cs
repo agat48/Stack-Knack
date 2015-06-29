@@ -70,12 +70,12 @@ public class GameControl : MonoBehaviour
 	private Vector3 initialCameraPosition;
 
 	void Start(){
-		initialCameraPosition = Camera.main.transform.position;
+		setLevelHeight ();
+		initializeCamera ();
 		/*zoomIn = new Rect (Screen.width/100, Screen.height- 50, Screen.width/5, Screen.height/10);
 		zoomOut = new Rect (Screen.width/50 + Screen.width/5, Screen.height- 50, Screen.width/5, Screen.height/10);
 		rotationField= new Rect (Screen.width-Screen.width/100- Screen.width/2.5f, Screen.height- Screen.height/7, Screen.width/2.5f, Screen.height/7);
 		*/
-		setLevelHeight ();
 		minX = -10;
 		maxX = 10;
 		minY = 0;
@@ -221,6 +221,7 @@ public class GameControl : MonoBehaviour
 	
 	void Update()
 	{
+
 		//lvl wykonany
 		if (finished) {
 			LevelComplete();
@@ -237,14 +238,14 @@ public class GameControl : MonoBehaviour
 			}
 			
 			
-			Debug.Log(countdownTimer);
+			//Debug.Log(countdownTimer);
 			if(countdownTimer <= 0){
 				countdown = false;
 				
 				objectsBck.Clear ();
 				for (int i = 0; i < objects.Length; i++) {
 					objectsBck.Add (new ObjectData (objects [i].transform.position, objects[i].rotation));
-					Debug.Log(objectsBck[i].rot);
+					//Debug.Log(objectsBck[i].rot);
 					objects [i].useGravity = true;
 					objects [i].isKinematic = false;
 					objects [i].constraints = RigidbodyConstraints.None;
@@ -252,6 +253,7 @@ public class GameControl : MonoBehaviour
 					objects [i].constraints = RigidbodyConstraints.FreezePositionZ;
 				}
 				countDownText.text = "";
+
 			}else{
 				
 				//odliczanie przed rozpoczęciem
@@ -262,27 +264,37 @@ public class GameControl : MonoBehaviour
 		//obsługa symulacji
 		if (start) {
 			timer -= Time.deltaTime;
+
 			
-			
-			bool complete = true;
-			
+			bool complete = false;
+			bool fallen = false;
+			float objectPosition = 0.0f;
+			float containerY = GameObject.Find("StackableObjects").transform.position.y;
+
 			//sprawdzanie pozycji obiektów
 			for (int i = 0; i < objects.Length; i++)
 			{
 				//punktacja
 				score += objects[i].transform.position.y/2;
-				
-				
-				if(objects[i].transform.position.y <= 2)
+
+				objectPosition = objects[i].transform.position.y + objects[i].transform.lossyScale.y / 2 - containerY;
+				//Debug.Log(objectPosition);
+
+				if(objectPosition <= -1) //jeśli spadnie z platformy
 				{
-					
-					complete = false;
+					fallen = true;
 					break;
 				}
+
+				if(objectPosition >= minLevel) //jeśli pozycja obiektu wyższa niż minimalny poziom
+				{
+					complete = true;
+				}
+
 				
 			}
 			
-			if(timer <= 0){
+			if(timer <= 0  || fallen){
 				
 				if(complete){
 					//next lvl
@@ -299,7 +311,7 @@ public class GameControl : MonoBehaviour
 					
 				}else{
 					//porazka
-					
+					LevelFail();
 					//resetowanie pozycji
 					for (int i = 0; i < objects.Length; i++)
 					{
@@ -332,7 +344,7 @@ public class GameControl : MonoBehaviour
 			
 			score -= Mathf.Abs(Input.acceleration.x*0.5f);
 			
-			Debug.Log("Punktacja: "+score);
+			//Debug.Log("Punktacja: "+score);
 			
 			if ((rotZ - step) < 30.0f || (rotZ - step) > 330.0f) {
 				paddle.transform.Rotate (0, 0, -step);
@@ -594,7 +606,9 @@ public class GameControl : MonoBehaviour
 		}
 	}
 	void LevelFail() {
-		Canvas newCanvas = Instantiate (LevelFailed);
+		if (!GameObject.Find ("LevelFail(Clone)")) {
+			Canvas newCanvas = Instantiate (LevelFailed);
+		}
 	}
 
 	public void simulationStart() {
@@ -617,14 +631,32 @@ public class GameControl : MonoBehaviour
 		string[] levName = Application.loadedLevelName.Split ('-');
 		switch (int.Parse( levName [1])) {
 		case 1:
-			minLevel = 3.0f;
+			minLevel = 2.5f;
 			break;
 		case 2:
-			minLevel = 5.0f;
+			minLevel = 1.7f;
+			break;
+		case 3:
+			minLevel = 3.5f;
+			break;
+		case 4:
+			minLevel = 2.5f;
+			break;
+		case 5:
+			minLevel = 4.0f;
 			break;
 		default:
 			minLevel = 0.0f;
 			break;
 		}
+	}
+
+	void initializeCamera() {
+		
+		Vector3 platform = GameObject.Find ("Platform").transform.position;
+		float levelY = GameObject.Find ("Level").transform.position.y;
+		float middleY = (platform.y + levelY) / 2;
+		Camera.main.transform.LookAt (new Vector3 (platform.x, middleY, platform.z));
+		initialCameraPosition = Camera.main.transform.position;
 	}
 }
