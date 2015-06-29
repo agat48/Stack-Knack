@@ -15,4 +15,9 @@ public class LoadLevel : MonoBehaviour {
 	public void LoadHowToScene() {
 		Application.LoadLevel ("howTo_16x9");
 	}
+	public void LoadNextLevel() {
+		string[] actLevelStr = Application.loadedLevelName.Split ('-');
+		int actLevel = int.Parse(actLevelStr [actLevelStr.Length - 1]);
+		LoadLevelByNumber (++actLevel);
+	}
 }
