@@ -10,8 +10,8 @@ public class CameraAdjust : MonoBehaviour {
 		Vector3 platform = GameObject.Find ("Platform").transform.position;
 		float levelY = GameObject.Find ("Level").transform.position.y;
 		float middleY = (platform.y + levelY) / 2;
-		transform.LookAt (new Vector3(platform.x, middleY, platform.z));
-		initialCameraOrientation = transform.eulerAngles;
+		Camera.main.transform.LookAt (new Vector3(platform.x, middleY, platform.z));
+		initialCameraOrientation = Camera.main.transform.eulerAngles;
 	}
 	
 	// Update is called once per frame
@@ -20,13 +20,13 @@ public class CameraAdjust : MonoBehaviour {
 	}
 
 	public void rotateHorizontal(float angle) {
-		float cameraY = transform.eulerAngles.y;
-		transform.RotateAround (Vector3.zero, Vector3.up, angle - cameraY);
+		float cameraY = Camera.main.transform.eulerAngles.y;
+		Camera.main.transform.RotateAround (Vector3.zero, Vector3.up, angle - cameraY);
 	}
 
 	public void rotateVertical(float angle) {
-		float cameraX = transform.eulerAngles.x;
-		transform.RotateAround (Vector3.zero, transform.right, angle - cameraX + initialCameraOrientation.x);
+		float cameraX = Camera.main.transform.eulerAngles.x;
+		Camera.main.transform.RotateAround (Vector3.zero, Camera.main.transform.right, angle - cameraX + initialCameraOrientation.x);
 		if (transform.eulerAngles.x >= 90) {
 			Debug.Log (angle);
 		}
@@ -34,10 +34,11 @@ public class CameraAdjust : MonoBehaviour {
 
 	public void zoomIn() {
 
-		transform.position += transform.forward * Time.deltaTime * speed;
+		Camera.main.transform.position += Camera.main.transform.forward * Time.deltaTime * speed;
 	}
 
 	public void zoomOut() {
-		transform.position -= transform.forward * Time.deltaTime * speed;
+		Camera.main.transform.position -= Camera.main.transform.forward * Time.deltaTime * speed;
 	}
+
 }

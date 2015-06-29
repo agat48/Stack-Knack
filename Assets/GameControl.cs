@@ -64,14 +64,18 @@ public class GameControl : MonoBehaviour
 	
 	
 	private float score = 0;
+	public Canvas levelUi;
+	private float minLevel = 0.0f; //minimalny poziom, na który muszą wznosić się obiekty
 	
-	
+	private Vector3 initialCameraPosition;
+
 	void Start(){
-		
+		initialCameraPosition = Camera.main.transform.position;
 		/*zoomIn = new Rect (Screen.width/100, Screen.height- 50, Screen.width/5, Screen.height/10);
 		zoomOut = new Rect (Screen.width/50 + Screen.width/5, Screen.height- 50, Screen.width/5, Screen.height/10);
 		rotationField= new Rect (Screen.width-Screen.width/100- Screen.width/2.5f, Screen.height- Screen.height/7, Screen.width/2.5f, Screen.height/7);
 		*/
+		setLevelHeight ();
 		minX = -10;
 		maxX = 10;
 		minY = 0;
@@ -136,18 +140,18 @@ public class GameControl : MonoBehaviour
 					Camera.main.transform.transform.localEulerAngles = new Vector3 (24.84972f, 0, 0);
 				}
 				//widok od gory
-				if (GUI.Button (new Rect (Screen.width - Screen.width / 100 - Screen.width / 3, Screen.height / 100, Screen.width / 3, Screen.height / 10), "Top", smallFont)) {
+				if (GUI.Button (new Rect (Screen.width / 50 + Screen.width / 3, Screen.height / 100, Screen.width / 3.2f - Screen.width / 100, Screen.height / 10), "Top", smallFont)) {
 					Camera.main.transform.position = new Vector3 (0, 20, 0);
 					Camera.main.transform.transform.localEulerAngles = new Vector3 (90, 0, 0);
 				}
 				//rozpoczecie symulacji
-				if (GUI.Button (new Rect (Screen.width / 50 + Screen.width / 3, Screen.height / 100, Screen.width / 3.2f - Screen.width / 100, Screen.height / 10), "Sim", smallFont)) {
+				/*if (GUI.Button (new Rect (Screen.width / 50 + Screen.width / 3, Screen.height / 100, Screen.width / 3.2f - Screen.width / 100, Screen.height / 10), "Sim", smallFont)) {
 					simulate = true;
 					
 					Camera.main.orthographic = true;
 					Camera.main.transform.position = new Vector3 (0, 7.7f, -6);
 					Camera.main.transform.transform.localEulerAngles = new Vector3 (10, 0, 0);
-				}
+				} */
 			} else {
 				
 				//symulacja
@@ -205,6 +209,8 @@ public class GameControl : MonoBehaviour
 						
 						paddle.transform.rotation = Quaternion.Euler (Vector3.zero);
 						simulate = false;
+						levelUi.transform.Find("Container").GetComponent<CanvasGroup>().alpha = 1;
+						levelUi.transform.Find("Container").GetComponent<CanvasGroup>().interactable = true;
 					}
 				}	
 				
@@ -589,5 +595,36 @@ public class GameControl : MonoBehaviour
 	}
 	void LevelFail() {
 		Canvas newCanvas = Instantiate (LevelFailed);
+	}
+
+	public void simulationStart() {
+		simulate = true;
+		levelUi.transform.Find("Container").GetComponent<CanvasGroup>().alpha = 0;
+		levelUi.transform.Find("Container").GetComponent<CanvasGroup>().interactable = false;
+		Camera.main.orthographic = true;
+		Camera.main.transform.position = new Vector3 (0, 7.7f, -6);
+		Camera.main.transform.transform.localEulerAngles = new Vector3 (10, 0, 0);
+	}
+
+	void setLevelHeight() {
+		calculateLevelHeight ();
+		GameObject platform = GameObject.Find ("Platform");
+		GameObject level = GameObject.Find ("Level");
+		level.transform.position = new Vector3 (level.transform.position.x, platform.transform.position.y + minLevel, level.transform.position.z);
+	}
+
+	void calculateLevelHeight() {
+		string[] levName = Application.loadedLevelName.Split ('-');
+		switch (int.Parse( levName [1])) {
+		case 1:
+			minLevel = 3.0f;
+			break;
+		case 2:
+			minLevel = 5.0f;
+			break;
+		default:
+			minLevel = 0.0f;
+			break;
+		}
 	}
 }

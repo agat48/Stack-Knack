@@ -21,10 +21,10 @@ public class EnableLevels : MonoBehaviour {
 				Sprite spr = Resources.Load<Sprite>("box_"+num);
 				if(spr) {
 					child.GetComponent<Button>().image.overrideSprite = spr;
-					
+					child.GetComponent<Button>().interactable = true;
 				} 
 			} else {
-				child.GetComponent<Button>().interactable = false;
+				// sth
 			}
 		}
 	}
